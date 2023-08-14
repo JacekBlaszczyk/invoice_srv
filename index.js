@@ -52,6 +52,7 @@ app.post("/invoice",
                     let rows = [];
                     let index = 1;
                     let content = []
+                    const items = [];
                     data.pages.forEach(page => {
                         page.content.forEach(el => {
                             content.push({...el, pageNr: page.pageInfo.num });
@@ -63,7 +64,7 @@ app.post("/invoice",
                         }
                         return a.y - b.y
                     }).forEach(el => {
-                        let found = rows.find(elem => elem.y === el.y);
+                        let found = rows.find(elem => elem.y === el.y && elem.pageNr === el.pageNr);
                         if (found) {
                             found.content.push(el.str);
                         } else {
@@ -71,15 +72,27 @@ app.post("/invoice",
                             index++;
                         }
                     })
+                    
                     rows.sort((a, b) => {
                         if (a.pageNr !== b.pageNr) {
                             return a.pageNr - b.pageNr
                         }
                         return a.y - b.y
                     });
+                    if (rows[0].content[0] === 'Lp' && rows[0].content[2] === 'Przedmiot'){
+                        rows.forEach(row => {
+                            if (row.content[0] !== 'Lp' && row.content[0] !== 'SUMA'){
+                            allItems.push( {
+                                name: row.content[2],
+                                amount: parseInt(row.content[6]),
+                                unitPrice: parseFloat(row.content[4])
+                            } )
+                        }
+                        })
+                    } else {
                     const previousIndex = rows.findIndex(el => el.content[0] === 'WCZEŚNIEJSZE BRAKI DOŁĄCZONE DO BIEŻĄCEGO ZAMÓWIENIA');
                     const focusIndex = rows.findIndex(el => el.content[0] === 'MATERIAŁY POMOCNE W SPRZEDAŻY (bez opustu)');
-                    const items = [];
+                    
                     const tempItems = [...rows.slice(rows.findIndex(el => el.content[0] === 'PRODUKTY Z BIEŻĄCEGO KATALOGU') + 1, rows.findIndex(el => el.content[0] === 'RAZEM' || el.content[1] === 'RAZEM'))];
                     if (previousIndex > -1) {
                         tempItems.push(...rows.slice(previousIndex + 1, rows.findIndex((el, idx) => idx > previousIndex && (el.content[0] === 'RAZEM' || el.content[1] === 'RAZEM'))))
@@ -138,6 +151,7 @@ app.post("/invoice",
                             allItems.push(item);
                         }
                     })
+                }
 
                 })
                 res.send(allItems.sort((a, b) => b.amount - a.amount));
