@@ -171,7 +171,7 @@ app.post("/invoice",
 app.listen(process.env.PORT || 8081, function() {
     console.log("Server started on port 8081");
     setInterval(() => {
-        axios.get("/https://avonapi.onrender.com/ping").then(res =>{
+        axios.get("https://avonapi.onrender.com/ping").then(res =>{
 
         })
     }, 300000);
