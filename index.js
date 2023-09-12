@@ -128,11 +128,11 @@ app.post("/invoice",
                         } else {
                             if (row.content[0] === '' ){
                                 if (typeof row.content[19] === 'string' && row.content[19].includes(",")){
-                                    row.content[19] = row.content[19].replace(/,./g, '')
+                                    row.content[19] = row.content[19].replace(/\,/g, '')
                                 } 
                             } else {
                                 if (typeof row.content[18] === 'string' && row.content[18].includes(",")){
-                                    row.content[18] = row.content[18].replace(/,./g, '')
+                                    row.content[18] = row.content[18].replace(/\,/g, '')
                                 } 
                             }
                             items.push({
