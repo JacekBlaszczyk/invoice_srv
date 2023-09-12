@@ -126,10 +126,19 @@ app.post("/invoice",
                             items.push(item);
                             i++;
                         } else {
+                            if (row.content[0] === '' ){
+                                if (typeof(row.content[19]) === 'string' && row.content[19].includes(",")){
+                                    row.content[19] = row.content[19].replaceAll(",", "")
+                                } 
+                            } else {
+                                if (typeof(row.content[18]) === 'string' && row.content[18].includes(",")){
+                                    row.content[18] = row.content[18].replaceAll(",", "")
+                                } 
+                            }
                             items.push({
                                 name: row.content[0] === '' ? row.content[5] : row.content[4],
                                 amount: row.content[0] === '' ? parseInt(row.content[7]) : parseInt(row.content[6]),
-                                unitPrice: row.content[0] === '' ? Math.round((parseFloat(row.content[19].replaceAll(",", "")) / parseInt(row.content[7])) * 100) / 100 : Math.round((parseFloat(row.content[18].replaceAll(",", "")) / parseInt(row.content[6])) * 100) / 100,
+                                unitPrice: row.content[0] === '' ? Math.round((parseFloat(row.content[19]) / parseInt(row.content[7])) * 100) / 100 : Math.round((parseFloat(row.content[18]) / parseInt(row.content[6])) * 100) / 100,
                                 sku: row.content[0] === '' ? (row.content[3] ? row.content[3].replace("-", "") : "") : (row.content[2] ? row.content[2].replace("-", "") : "")
                             })
                             i++;
