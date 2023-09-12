@@ -127,11 +127,11 @@ app.post("/invoice",
                             i++;
                         } else {
                             if (row.content[0] === '' ){
-                                if (typeof(row.content[19]) === 'string' && row.content[19].includes(",")){
+                                if (typeof row.content[19] === 'string' && row.content[19].includes(",")){
                                     row.content[19] = row.content[19].replaceAll(",", "")
                                 } 
                             } else {
-                                if (typeof(row.content[18]) === 'string' && row.content[18].includes(",")){
+                                if (typeof row.content[18] === 'string' && row.content[18].includes(",")){
                                     row.content[18] = row.content[18].replaceAll(",", "")
                                 } 
                             }
