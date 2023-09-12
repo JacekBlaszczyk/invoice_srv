@@ -37,6 +37,10 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.get("/ping", (req, res) => {
+    res.send("pong")
+})
+
 app.post("/invoice",
     upload.any('invoice'),
     (req, res) => {
@@ -125,7 +129,7 @@ app.post("/invoice",
                             items.push({
                                 name: row.content[0] === '' ? row.content[5] : row.content[4],
                                 amount: row.content[0] === '' ? parseInt(row.content[7]) : parseInt(row.content[6]),
-                                unitPrice: row.content[0] === '' ? Math.round((parseFloat(row.content[19]) / parseInt(row.content[7])) * 100) / 100 : Math.round((parseFloat(row.content[18]) / parseInt(row.content[6])) * 100) / 100,
+                                unitPrice: row.content[0] === '' ? Math.round((parseFloat(row.content[19].replaceAll(",", "")) / parseInt(row.content[7])) * 100) / 100 : Math.round((parseFloat(row.content[18].replaceAll(",", "")) / parseInt(row.content[6])) * 100) / 100,
                                 sku: row.content[0] === '' ? (row.content[3] ? row.content[3].replace("-", "") : "") : (row.content[2] ? row.content[2].replace("-", "") : "")
                             })
                             i++;
@@ -166,4 +170,9 @@ app.post("/invoice",
 // })
 app.listen(process.env.PORT || 8081, function() {
     console.log("Server started on port 8081");
+    setInterval(() => {
+        axios.get("/https://avonapi.onrender.com/ping").then(res =>{
+
+        })
+    }, 300000);
 });
