@@ -86,11 +86,18 @@ app.post("/invoice",
                     if (rows[0].content[0] === 'Lp' && rows[0].content[2] === 'Przedmiot'){
                         rows.forEach(row => {
                             if (row.content[0] !== 'Lp' && row.content[0] !== 'SUMA'){
+                                if (row.content.length === 7){
                             allItems.push( {
                                 name: row.content[2],
                                 amount: parseInt(row.content[6]),
                                 unitPrice: parseFloat(row.content[4])
-                            } )
+                            } )} else if (row.content.length === 6){
+                                allItems.push( {
+                                    name: row.content[2],
+                                    amount: parseInt(row.content[5]),
+                                    unitPrice: parseFloat(row.content[3])
+                                } )
+                            }
                         }
                         })
                     } else {
